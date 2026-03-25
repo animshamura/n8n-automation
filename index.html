@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Form</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #2c3e50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #34495e;
+    }
+
+    #msg {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>Employee Form</h2>
+
+  <form id="form">
+    <input type="text" id="name" placeholder="Name" required>
+    <input type="number" id="id" placeholder="ID" required>
+    <input type="number" id="salary" placeholder="Salary" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="text" id="designation" placeholder="Designation" required>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="msg"></div>
+</div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjuWpJgclPn89WFbDu-n71SQQuc7ijJ2Dpyx2y0PcZuJ8nyYMJBkbqi4hKMx7QPABUwA/exec";
+
+document.getElementById("form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const msg = document.getElementById("msg");
+
+  const data = {
+    name: document.getElementById("name").value,
+    id: document.getElementById("id").value,
+    salary: document.getElementById("salary").value,
+    email: document.getElementById("email").value,
+    designation: document.getElementById("designation").value
+  };
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    if (result.status === "success") {
+      msg.innerText = "✅ Data saved successfully!";
+      msg.className = "success";
+      document.getElementById("form").reset();
+    } else {
+      throw new Error("Failed");
+    }
+
+  } catch (err) {
+    msg.innerText = "❌ Error saving data";
+    msg.className = "error";
+  }
+});
+</script>
+
+</body>
+</html>
